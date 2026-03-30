@@ -14,14 +14,11 @@ jobs:
         uses: actions/setup-dotnet@v3
         with:
           dotnet-version: '10.0.x'
-      - name: Install docfx
-        run: dotnet tool install -g docfx.console
-      - name: Add dotnet tools to PATH
-        run: echo "%USERPROFILE%\\.dotnet\\tools" >> $GITHUB_PATH
-        shell: cmd
-      - name: Restore and build project with XML docs
+      - name: Build project with XML docs
         run: |
           dotnet build TimeManager/TimeManager.csproj -c Release -p:GenerateDocumentationFile=true -p:DocumentationFile=bin/Release/net10.0-windows/TimeManager.xml --no-restore
+      - name: Install DocFX (Chocolatey)
+        run: choco install docfx -y
       - name: Run docfx metadata
         run: docfx metadata docs/docfx.json
       - name: Run docfx build
