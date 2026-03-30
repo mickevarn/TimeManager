@@ -1,10 +1,13 @@
 using System.Text.Json;
+using System.Runtime.CompilerServices;
+
+[assembly: InternalsVisibleTo("TimeManager.Tests")]
 
 namespace TimeManager;
 
 public enum Category { Debt, Growth, Other }
 
-public enum Activity { Programming, Research, Learning, Meeting, Administration, Other }
+public enum Activity { Programming, Research, Documentation, Learning, Meeting, Administration, Other }
 
 public class TimeEntry
 {
@@ -18,11 +21,12 @@ public class TimeEntry
 
 public static class TimeEntryStore
 {
-    private static readonly string DataFolder = Path.Combine(
+    // Make these internal and writable so tests can point the store to a temp folder.
+    internal static string DataFolder = Path.Combine(
         Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
         "TimeManager");
 
-    private static readonly string DataFile = Path.Combine(DataFolder, "entries.json");
+    internal static string DataFile = Path.Combine(DataFolder, "entries.json");
 
     public static void Save(TimeEntry entry)
     {

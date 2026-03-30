@@ -2,5 +2,6 @@
   <Folder Name="/Solution Items/">
     <File Path=".gitignore" />
   </Folder>
+  <Project Path="TimeManager.Tests/TimeManager.Tests.csproj" />
   <Project Path="TimeManager/TimeManager.csproj" />
 </Solution>
