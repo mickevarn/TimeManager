@@ -1,5 +1,8 @@
 namespace TimeManager;
 
+/// <summary>
+/// Main application window used to record time entries and control the timer.
+/// </summary>
 public class MainForm : Form
 {
     private readonly TextBox _descriptionBox;
@@ -17,6 +20,9 @@ public class MainForm : Form
     private DateTime _segmentStart;
     private bool _running;
 
+    /// <summary>
+    /// Initializes a new instance of <see cref="MainForm"/> and sets up the UI.
+    /// </summary>
     public MainForm()
     {
         Text = "Time Manager";
@@ -119,6 +125,9 @@ public class MainForm : Form
         };
     }
 
+    /// <summary>
+    /// Starts or resumes the timer and records the start time for the current segment.
+    /// </summary>
     private void OnRun(object? sender, EventArgs e)
     {
         if (string.IsNullOrWhiteSpace(_descriptionBox.Text))
@@ -137,6 +146,9 @@ public class MainForm : Form
         _stopButton.Enabled = true;
     }
 
+    /// <summary>
+    /// Pauses the running timer and accumulates elapsed time for the current segment.
+    /// </summary>
     private void OnPause(object? sender, EventArgs e)
     {
         if (_running)
@@ -150,6 +162,9 @@ public class MainForm : Form
         }
     }
 
+    /// <summary>
+    /// Stops the timer, creates a TimeEntry and saves it to storage.
+    /// </summary>
     private void OnStop(object? sender, EventArgs e)
     {
         if (_running)
@@ -184,6 +199,9 @@ public class MainForm : Form
         ResetForm();
     }
 
+    /// <summary>
+    /// Resets the UI state to the initial ready state.
+    /// </summary>
     private void ResetForm()
     {
         _elapsed = TimeSpan.Zero;
@@ -197,14 +215,23 @@ public class MainForm : Form
         _stopButton.Enabled = false;
     }
 
+    /// <summary>
+    /// Formats a TimeSpan as hh:mm:ss.
+    /// </summary>
     private static string FormatDuration(TimeSpan t)
         => $"{(int)t.TotalHours:D2}:{t.Minutes:D2}:{t.Seconds:D2}";
 
+    /// <summary>
+    /// Helper to create a right-aligned label for the layout.
+    /// </summary>
     private static Label MakeLabel(string text) =>
         new() { Text = text, Dock = DockStyle.Fill, TextAlign = ContentAlignment.MiddleRight };
 
     // ?? Owner-drawn button helpers ????????????????????????????????????????????
 
+    /// <summary>
+    /// Creates an owner-drawn button with an icon painter and label.
+    /// </summary>
     private static Button MakeIconButton(Action<Graphics, Rectangle, bool> drawIcon, string label, int width)
     {
         var btn = new Button
@@ -220,12 +247,18 @@ public class MainForm : Form
         return btn;
     }
 
+    /// <summary>
+    /// Updates the icon and label for an owner-drawn button and requests a repaint.
+    /// </summary>
     private static void SetButtonIcon(Button btn, Action<Graphics, Rectangle, bool> drawIcon, string label)
     {
         btn.Tag = (drawIcon, label);
         btn.Invalidate();
     }
 
+    /// <summary>
+    /// Paint event handler for owner-drawn buttons.
+    /// </summary>
     private static void OnButtonPaint(object? sender, PaintEventArgs e)
     {
         if (sender is not Button btn) return;
@@ -252,6 +285,9 @@ public class MainForm : Form
 
     // ?? Icon painters ?????????????????????????????????????????????????????????
 
+    /// <summary>
+    /// Draws a play triangle inside the given rectangle.
+    /// </summary>
     private static void DrawPlay(Graphics g, Rectangle r, bool enabled)
     {
         var color = enabled ? Color.FromArgb(0, 140, 0) : Color.FromArgb(160, 160, 160);
@@ -265,6 +301,9 @@ public class MainForm : Form
         g.FillPolygon(brush, pts);
     }
 
+    /// <summary>
+    /// Draws a pause icon.
+    /// </summary>
     private static void DrawPause(Graphics g, Rectangle r, bool enabled)
     {
         var color = enabled ? Color.FromArgb(200, 130, 0) : Color.FromArgb(160, 160, 160);
@@ -274,6 +313,9 @@ public class MainForm : Form
         g.FillRectangle(brush, r.Right - barW, r.Top, barW, r.Height);
     }
 
+    /// <summary>
+    /// Draws a stop square.
+    /// </summary>
     private static void DrawStop(Graphics g, Rectangle r, bool enabled)
     {
         var color = enabled ? Color.FromArgb(190, 0, 0) : Color.FromArgb(160, 160, 160);
@@ -281,6 +323,9 @@ public class MainForm : Form
         g.FillRectangle(brush, r);
     }
 
+    /// <summary>
+    /// Draws a report icon (clipboard with lines).
+    /// </summary>
     private static void DrawReport(Graphics g, Rectangle r, bool enabled)
     {
         var color = enabled ? Color.FromArgb(0, 100, 200) : Color.FromArgb(160, 160, 160);

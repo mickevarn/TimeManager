@@ -1,7 +1,9 @@
 using System.Text;
 
 namespace TimeManager;
-
+/// <summary>
+/// Form to display and edit time entries for a selected week, with a total duration summary and save functionality.
+/// </summary>
 public class WeeklyReportForm : Form
 {
     private readonly DateTimePicker _weekPicker;
@@ -10,6 +12,9 @@ public class WeeklyReportForm : Form
     private readonly Button _btnSave;
     private List<TimeEntry> _entries = new();
 
+    /// <summary>
+    /// Constructs the weekly report form, initializing UI components and loading data for the current week.
+    /// </summary>
     public WeeklyReportForm()
     {
         Text = "Weekly Report";

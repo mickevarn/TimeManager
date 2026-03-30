@@ -8,17 +8,25 @@ on:
 jobs:
   build-docs:
     runs-on: windows-latest
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: 'true'
     steps:
       - uses: actions/checkout@v4
       - name: Setup .NET
         uses: actions/setup-dotnet@v3
         with:
           dotnet-version: '10.0.x'
+      - name: Restore
+        run: dotnet restore TimeManager/TimeManager.csproj
       - name: Build project with XML docs
         run: |
           dotnet build TimeManager/TimeManager.csproj -c Release -p:GenerateDocumentationFile=true -p:DocumentationFile=bin/Release/net10.0-windows/TimeManager.xml --no-restore
-      - name: Install DocFX (Chocolatey)
-        run: choco install docfx -y
+      - name: Install DocFX (download)
+        shell: pwsh
+        run: |
+          Invoke-WebRequest -Uri 'https://github.com/dotnet/docfx/releases/latest/download/docfx.zip' -OutFile docfx.zip
+          Expand-Archive docfx.zip -DestinationPath docfx
+          echo "${{ github.workspace }}\\docfx" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
       - name: Run docfx metadata
         run: docfx metadata docs/docfx.json
       - name: Run docfx build
